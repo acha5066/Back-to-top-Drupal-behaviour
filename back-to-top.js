@@ -13,7 +13,7 @@ Drupal.behaviors.backToTop = {
 				plugin.init($body);
 			});
 			$window.on('scroll', function() {
-				plugin.scrollVal = document.body.scrollTop;
+				plugin.scrollVal = document.documentElement.scrollTop || document.body.scrollTop;
 				plugin.init($body);
 			});
 		});
