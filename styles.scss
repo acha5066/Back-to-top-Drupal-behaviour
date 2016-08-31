@@ -1,0 +1,32 @@
+@include susy-breakpoint(0 $breakpoint-medium) {
+  #back-to-top {
+    width: em(40px);
+    height: em(40px);
+    display: block;
+    background-color: $color-blue-grey;
+    z-index: 999999999;
+    @include opacity(0);
+    @include transition(2s opacity ease);
+    @include border-radius(4px);
+    &:hover {
+      cursor: pointer;
+    }
+    &:before {
+      color: white;
+      font-size: em(20px, $base-font-size);
+      @include fontello($icon-arrow-down);
+      display: block;
+      padding: 68% 0;
+      @include rotate(180deg);
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  #back-to-top.stuck {
+    position: fixed;
+    bottom: 1.5em;
+    right: 1em;
+    @include opacity(1);
+  }
+}
