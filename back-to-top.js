@@ -7,11 +7,15 @@ Drupal.behaviors.backToTop = {
 		var plugin = this;
 		$('body', context).once('backToTop', function () {
 			var $body = $(this);
+			var $window = $(window);
 			plugin.init($body);
-			$(window).resize(function () {
+			$window.on('resize', function() {
 				plugin.init($body);
 			});
-
+			$window.on('scroll', function() {
+				plugin.scrollVal = document.body.scrollTop;
+				plugin.init($body);
+			});
 		});
 	},
 	/**
@@ -19,12 +23,13 @@ Drupal.behaviors.backToTop = {
 	 */
 	init: function ($body) {
 		var plugin = this;
-		if ($(window).width() < breakpointMedium) {
+		var $windowWidth = $(window).width();
+		if ($windowWidth < breakpointMedium && plugin.scrollVal > 100) {
 			if (plugin.$backToTop === undefined) {
 				$body.prepend('<div id="back-to-top">');
 				plugin.$backToTop = $('#back-to-top');
 				// register click event
-				plugin.$backToTop.on('click', function () {
+				plugin.$backToTop.unbind('click').on('click', function() {
 					window.scrollTo(0, 0);
 				});
 				plugin.sticky = plugin.waypoint();
@@ -40,16 +45,15 @@ Drupal.behaviors.backToTop = {
 	},
 	/**
 	 * Configure waypoints
-	 * @return a Waypoint.Sticky object
+	 * @return a Waypoint object
 	 */
 	waypoint: function () {
 		var plugin = this;
 		if (plugin.sticky === undefined) {
 			return new Waypoint.Sticky({
 				element: plugin.$backToTop,
-				offset: '20%'
+				offset: 40
 			});
 		}
 	}
-
-}
+};
